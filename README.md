@@ -45,8 +45,8 @@ It supports three scheduling modes depending on how many players you have and ho
 Clone the repo and navigate inside:
 
 ```bash
-git clone https://github.com/your-user/your-repo.git
-cd your-repo
+git clone https://github.com/sophisid/americano_padel.git
+cd americano_padel
 ```
 
 You only need Python 3.8+ and the standard library.
