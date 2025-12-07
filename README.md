@@ -1,2 +1,205 @@
-# americano_padel
-Americano padel scheduler for programmers who automate everything, including fun.
+# Americano Padel Scheduler
+
+Welcome to the most over-engineered Americano Padel scheduler you will ever see.
+This Python script takes a simple CSV of player names and generates a fully structured Americano-style tournament schedule.
+
+It supports three scheduling modes depending on how many players you have and how mathematically perfect you want the format to be.
+
+---
+
+## Features
+
+* Import players from a CSV (with a single column called `name`).
+* Three scheduling modes, depending on how chaotic your group is:
+
+### 1. Strict Mode (default)
+
+* Works only when the number of players is a **multiple of 4**.
+* Guarantees that each pair of players are **teammates exactly once**.
+
+### 2. Balanced Mode (`--balanced`)
+
+* Also requires the number of players to be a **multiple of 4**.
+* For 4 players: produces the classic perfect Americano (teammates once, opponents twice).
+* For 8, 12, 16…
+
+  * Each pair becomes teammates **N/4 times**.
+  * Opponents are spread more fairly through cyclic rotations.
+
+### 3. Loose Mode (`--loose`)
+
+* Works for **any even number of players ≥ 4**, including 6, 10, 14, etc.
+
+* Uses a symmetric rotation heuristic.
+
+* Not mathematically perfect, but very fair (and very practical).
+
+* Export the schedule to a CSV ready for scorekeeping.
+
+* Compute total player points from filled-in match results.
+
+---
+
+## Installation
+
+Clone the repo and navigate inside:
+
+```bash
+git clone https://github.com/your-user/your-repo.git
+cd your-repo
+```
+
+You only need Python 3.8+ and the standard library.
+
+---
+
+## Players CSV Format
+
+Your input CSV must look like this:
+
+```csv
+name
+Sophia
+Ioanna
+Maria
+Kostis
+Stylianos
+Achilleas
+Aldo
+Kelado
+...
+```
+
+Only one column is required: `name`.
+
+---
+
+## Generate a Schedule
+
+### Strict Mode (default)
+
+```bash
+python americano_padel.py generate players.csv -o schedule.csv
+```
+
+Works only when the number of players is a multiple of 4.
+
+---
+
+### Loose Mode (for 6 players, 10 players, etc)
+
+```bash
+python americano_padel.py generate players.csv --loose -o schedule.csv
+```
+
+Loose mode skips strict constraints and produces a balanced rotation for any even number ≥ 4.
+
+---
+
+### Balanced Mode
+
+```bash
+python americano_padel.py generate players.csv --balanced -o schedule.csv
+```
+
+* Only works when players are a multiple of 4.
+* For 4 players: produces the perfect Americano (3 matches).
+* For more: each teammate pair appears N/4 times while opponents distribute more evenly.
+
+---
+
+## Example Schedule Output
+
+```csv
+match_id,team1_p1,team1_p2,team2_p1,team2_p2,team1_score,team2_score
+1,Sophia,Kelado,Kostis,Maria,,
+2,Stylianos,Ioanna,Achilleas,Aldo,,
+3,Sophia,Maria,Kelado,Ioanna,,
+4,Kostis,Aldo,Stylianos,Achilleas,,
+5,Sophia,Ioanna,Maria,Aldo,,
+6,Kelado,Achilleas,Kostis,Stylianos,,
+7,Sophia,Aldo,Ioanna,Achilleas,,
+8,Maria,Stylianos,Kelado,Kostis,,
+9,Sophia,Achilleas,Aldo,Stylianos,,
+10,Ioanna,Kostis,Maria,Kelado,,
+11,Sophia,Stylianos,Achilleas,Kostis,,
+12,Aldo,Kelado,Ioanna,Maria,,
+13,Sophia,Kostis,Stylianos,Kelado,,
+14,Achilleas,Maria,Aldo,Ioanna,,
+...
+```
+
+You or your friends can later fill in the scores.
+
+---
+
+## Add Scores and Compute Rankings
+
+After playing, fill the score columns:
+
+```csv
+match_id,team1_p1,team1_p2,team2_p1,team2_p2,team1_score,team2_score
+1,Sophia,Kelado,Kostis,Maria,0,29
+2,Stylianos,Ioanna,Achilleas,Aldo,23,6
+3,Sophia,Maria,Kelado,Ioanna,5,24
+4,Kostis,Aldo,Stylianos,Achilleas,20,9
+5,Sophia,Ioanna,Maria,Aldo,15,14
+6,Kelado,Achilleas,Kostis,Stylianos,23,6
+7,Sophia,Aldo,Ioanna,Achilleas,23,6
+8,Maria,Stylianos,Kelado,Kostis,0,29
+9,Sophia,Achilleas,Aldo,Stylianos,25,4
+10,Ioanna,Kostis,Maria,Kelado,24,5
+11,Sophia,Stylianos,Achilleas,Kostis,24,5
+12,Aldo,Kelado,Ioanna,Maria,10,19
+13,Sophia,Kostis,Stylianos,Kelado,12,17
+14,Achilleas,Maria,Aldo,Ioanna,3,26
+
+...
+```
+
+Then run:
+
+```bash
+python americano_padel.py scores schedule.csv
+```
+
+Example output:
+
+```
+Player rankings (total points):
+ 1. Ioanna: 137 points
+ 2. Kostis: 125 points
+ 3. Kelado: 108 points
+ 4. Sophia: 104 points
+ 5. Aldo: 103 points
+ 6. Stylianos: 83 points
+ 7. Achilleas: 77 points
+ 8. Maria: 75 points
+```
+
+If someone complains... remind them that the scoreboard is now automated and therefore objective.
+
+---
+
+## Directory Structure
+
+```
+.
+├── americano_padel.py
+├── players.csv
+├── schedule.csv
+└── README.md
+```
+
+---
+
+## Contributing
+
+If you want to improve this project:
+
+* Fork it.
+* Add stuff.
+* Break nothing.
+* Send a pull request.
+
+If you want to contribute… play padel first.
